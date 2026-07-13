@@ -2,6 +2,8 @@
 
 An ultra-lightweight, 100% client-side Markdown editor and viewer. Built with plain HTML, vanilla CSS, and pure JavaScript. No bundlers, frameworks, or npm. It's designed to be free, privacy-focused, and easy on low-spec laptops.
 
+✒️ Try [MarkTab](https://nirnawati-expt.github.io/marktab/) Live. Free, lightweight, and secure markdown editor right in your browser.
+
 ## Why This Exists
 
 Most Markdown editors mean installing a heavy desktop app, fiddling with IDE extensions, or paying for a subscription. For people who live in the browser anyway, launching another resource hog just to take notes is wasteful, it clutters the desktop, drains battery, and adds friction.
@@ -47,4 +49,5 @@ Most Markdown editors mean installing a heavy desktop app, fiddling with IDE ext
 
 ## License
 
-MIT. Free and open source.
+- Software Code: Licensed under the [MIT](/LICENSE) License.
+- Documentation & Content: The Markdown Cheat Sheet content is sourced from Markdown Guide and licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
