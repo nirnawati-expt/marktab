@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✒️</text></svg>"
+    />
+    <title>MarkTab: Free, Lightweight & Secure Markdown Live Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module">
+      import openDyslexic from "https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/+esm";
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+      #preview {
+        content-visibility: auto;
+        contain-intrinsic-size: 100px 500px;
+      }
+
+      #editor {
+        font-family: "Source Code Pro", monospace;
+      }
+      .preview-content {
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+      .dyslexic-mode .preview-content,
+      .dyslexic-mode .preview-content * {
+        font-family: "OpenDyslexic", sans-serif !important;
+      }
+      .preview-content img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.375rem;
+        background-color: #f3f4f6; /* Warna placeholder abu-abu saat memuat */
+      }
+
+      html.dark .preview-content img {
+        background-color: #1f2937;
+      }
+
+      .preview-content img:not([width]):not([height]) {
+        aspect-ratio: 16 / 9;
+        object-fit: cover; /* Memastikan placeholder rapi */
+      }
+
+      .preview-content img:complete {
+        aspect-ratio: auto;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body
+    class="h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden"
+  >
+    <nav
+      class="h-14 bg-gray-600 text-white flex items-center justify-between px-4 z-40 shrink-0 shadow-md"
+    >
+      <div class="text-lg font-bold tracking-wide">✒️ MarkTab</div>
+
+      <div class="flex items-center space-x-2">
+        <button
+          id="theme-btn"
+          class="px-3 py-1.5 text-xs font-semibold bg-gray-700 hover:bg-gray-800 rounded transition text-white"
+        >
+          ☀️
+        </button>
+        <button
+          id="zoom-in-btn"
+          class="px-3 py-1.5 text-xs font-bold bg-gray-700 hover:bg-gray-800 rounded transition text-white"
+        >
+          Zoom In ➕
+        </button>
+        <button
+          id="zoom-out-btn"
+          class="px-3 py-1.5 text-xs font-bold bg-gray-700 hover:bg-gray-800 rounded transition text-white"
+        >
+          Zoom Out ➖
+        </button>
+        <button
+          id="toggle-editor-btn"
+          class="px-3 py-1.5 text-xs font-semibold bg-gray-700 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed rounded transition text-white"
+        >
+          Hide Editor
+        </button>
+        <button
+          id="toggle-preview-btn"
+          class="px-3 py-1.5 text-xs font-semibold bg-gray-700 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed rounded transition text-white"
+        >
+          Hide Preview
+        </button>
+        <button
+          id="dyslexic-btn"
+          class="px-3 py-1.5 text-xs font-semibold bg-blue-700 hover:bg-blue-800 text-white rounded transition"
+        >
+          📖 OpenDyslexic: Off
+        </button>
+        <button
+          id="copy-md-btn"
+          class="px-3 py-1.5 text-xs font-medium bg-gray-700 hover:bg-gray-800 rounded transition text-white"
+        >
+          Copy Markdown
+        </button>
+        <button
+          id="copy-html-btn"
+          class="px-3 py-1.5 text-xs font-medium bg-gray-700 hover:bg-gray-800 rounded transition text-white"
+        >
+          Copy HTML
+        </button>
+        <button
+          id="download-md-btn"
+          class="px-3 py-1.5 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 rounded transition text-white"
+        >
+          Download .md
+        </button>
+      </div>
+    </nav>
+
+    <main class="flex flex-1 h-[calc(100vh-3.5rem)] overflow-hidden relative">
+      <textarea
+        id="editor"
+        class="w-1/2 h-full p-6 font-mono text-sm resize-none focus:outline-none bg-gray-950 text-gray-100 border-r border-gray-800 leading-relaxed transition-all duration-300"
+        placeholder="Ketik markdown di sini..."
+      >
+# Markdown Cheat Sheet
+
+Guide from [The Markdown Guide](https://www.markdownguide.org)
+
+## Basic Syntax
+
+These are the elements outlined in John Gruber’s original design document. All Markdown applications support these elements.
+
+### Heading
+
+# H1
+## H2
+### H3
+#### H4
+##### H5
+
+### Bold
+
+**bold text**
+
+### Italic
+
+*italicized text*
+
+### Blockquote
+
+> blockquote
+
+### Ordered List
+
+1. First item
+2. Second item
+3. Third item
+
+### Unordered List
+
+- First item
+- Second item
+- Third item
+
+### Code
+
+`code`
+
+### Horizontal Rule
+
+---
+
+### Link
+
+[Markdown Guide](https://www.markdownguide.org)
+
+### Image
+
+![alt text](https://www.markdownguide.org/assets/images/tux.png)
+
+## Extended Syntax
+
+These elements extend the basic syntax by adding additional features. Not all Markdown applications support these elements.
+
+### Table
+
+| Syntax | Description |
+| ----------- | ----------- |
+| Header | Title |
+| Paragraph | Text |
+
+### Fenced Code Block
+
+```
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "age": 25
+}
+```
+
+### Footnote ❌ NOT SUPPORTED
+
+### Heading ID
+
+### My Great Heading {#custom-id}
+
+### Definition List
+
+term
+: definition
+
+### Strikethrough
+
+~~The world is flat.~~
+
+### Task List
+
+- [x] Write the press release
+- [ ] Update the website
+- [ ] Contact the media
+
+### Emoji ❌ NOT SUPPORTED
+
+### Highlight
+
+I need to highlight these ==very important words==.
+
+### Subscript
+
+H~2~O
+
+### Superscript
+
+X^2^
+
+go to [custom heading](.#custom-heading)
+
+go to [basic syntax](.#basic-syntax)
+
+      </textarea>
+      <div
+        id="preview-container"
+        class="w-1/2 h-full overflow-y-auto p-6 bg-white dark:bg-gray-900 relative transition-all duration-300"
+      >
+        <div
+          id="preview"
+          class="preview-content prose prose-slate dark:prose-invert max-w-none"
+        ></div>
+      </div>
+    </main>
+
+    <script>
+      const editor = document.getElementById("editor");
+      const preview = document.getElementById("preview");
+      const previewContainer = document.getElementById("preview-container");
+      const toggleEditorBtn = document.getElementById("toggle-editor-btn");
+      const togglePreviewBtn = document.getElementById("toggle-preview-btn");
+      const themeBtn = document.getElementById("theme-btn");
+      const dyslexicBtn = document.getElementById("dyslexic-btn");
+      const copyMDBtn = document.getElementById("copy-md-btn");
+      const copyHTMLBtn = document.getElementById("copy-html-btn");
+      const downloadMDBtn = document.getElementById("download-md-btn");
+      const htmlTag = document.documentElement;
+
+      let isSourceScroll = false;
+
+
+
+      marked.use({
+              hooks: {
+                postprocess(html) {
+                  let processedHtml = html.replace(
+                    /<h([1-6])>(.*?)\s*\{#([^\}]+)\}<\/h\1>/g,
+                    (match, level, content, id) => {
+                      const cleanId = id
+                        .trim()
+                        .toLowerCase()
+                        .replace(/[^a-z0-9_-]/g, "")
+                        .replace(/[\s_]+/g, "-");
+                      return `<h${level} id="${cleanId}" class="group relative flex items-center"><a href="javascript:void(0)" onclick="document.getElementById('${cleanId}').scrollIntoView({behavior: 'smooth'})" class="absolute -left-5 opacity-0 group-hover:opacity-100 text-blue-500 !no-underline font-normal text-base pr-2 transition-opacity duration-150" aria-hidden="false">#</a><span>${content}</span></h${level}>`;
+                    },
+                  );
+
+                  processedHtml = processedHtml.replace(
+                    /<h([1-6])(?![^>]*\bid=)>(.*?)<\/h\1>/g,
+                    (match, level, content) => {
+                      const id = content
+                        .replace(/<[^>]*>/g, "")
+                        .toLowerCase()
+                        .trim()
+                        .replace(/[^\w\s-]/g, "")
+                        .replace(/[\s_]+/g, "-");
+                      return `<h${level} id="${id}" class="group relative flex items-center"><a href="javascript:void(0)" onclick="document.getElementById('${id}').scrollIntoView({behavior: 'smooth'})" class="absolute -left-5 opacity-0 group-hover:opacity-100 text-blue-500 !no-underline font-normal text-base pr-2 transition-opacity duration-150" aria-hidden="false">#</a><span>${content}</span></h${level}>`;
+                    },
+                  );
+
+                  processedHtml = processedHtml
+                    .replace(/==([^=]+)==/g, "<mark>$1</mark>")
+                    .replace(/\^([^^]+)\^/g, "<sup>$1</sup>")
+                    .replace(/<del>([\s\S]*?)<\/del>/g, "<sub>$1</sub>");
+
+                  return processedHtml;
+                },
+              },
+            });
+
+      function renderMarkdown() {
+        preview.innerHTML = marked.parse(editor.value);
+
+        preview.querySelectorAll("img").forEach((img) => {
+          if (!img.getAttribute("width") && !img.getAttribute("height")) {
+            img.addEventListener(
+              "load",
+              function () {
+                // Pasang atribut width dan height asli gambar ke elemen HTML
+                img.setAttribute("width", img.naturalWidth);
+                img.setAttribute("height", img.naturalHeight);
+              },
+              { once: true },
+            ); // Jalankan hanya sekali per gambar
+          }
+        });
+      }
+
+      function debounce(func, timeout = 150) {
+        let timer;
+        return (...args) => {
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            func.apply(this, args);
+          }, timeout);
+        };
+      }
+
+      editor.addEventListener("input", debounce(renderMarkdown, 150));
+
+      editor.addEventListener("scroll", () => {
+        if (isSourceScroll || previewContainer.classList.contains("hidden"))
+          return;
+        isSourceScroll = true;
+        const scrollPercentage =
+          editor.scrollTop / (editor.scrollHeight - editor.clientHeight);
+        previewContainer.scrollTop =
+          scrollPercentage *
+          (previewContainer.scrollHeight - previewContainer.clientHeight);
+        setTimeout(() => (isSourceScroll = false), 50);
+      });
+
+      previewContainer.addEventListener("scroll", () => {
+        if (isSourceScroll || editor.classList.contains("hidden")) return;
+        isSourceScroll = true;
+        const scrollPercentage =
+          previewContainer.scrollTop /
+          (previewContainer.scrollHeight - previewContainer.clientHeight);
+        editor.scrollTop =
+          scrollPercentage * (editor.scrollHeight - editor.clientHeight);
+        setTimeout(() => (isSourceScroll = false), 50);
+      });
+
+      function updateButtonStates() {
+        const isEditorHidden = editor.classList.contains("hidden");
+        const isPreviewHidden = previewContainer.classList.contains("hidden");
+        togglePreviewBtn.disabled = isEditorHidden;
+        toggleEditorBtn.disabled = isPreviewHidden;
+      }
+
+      toggleEditorBtn.addEventListener("click", () => {
+        if (editor.classList.contains("hidden")) {
+          editor.classList.remove("hidden");
+          previewContainer.classList.replace("w-full", "w-1/2");
+          toggleEditorBtn.innerText = "Hide Editor";
+        } else {
+          editor.classList.add("hidden");
+          previewContainer.classList.replace("w-1/2", "w-full");
+          toggleEditorBtn.innerText = "Show Editor";
+        }
+        updateButtonStates();
+      });
+
+      togglePreviewBtn.addEventListener("click", () => {
+        if (previewContainer.classList.contains("hidden")) {
+          previewContainer.classList.remove("hidden");
+          editor.classList.replace("w-full", "w-1/2");
+          togglePreviewBtn.innerText = "Hide Preview";
+        } else {
+          previewContainer.classList.add("hidden");
+          editor.classList.replace("w-1/2", "w-full");
+          togglePreviewBtn.innerText = "Show Preview";
+        }
+        updateButtonStates();
+      });
+
+      themeBtn.addEventListener("click", () => {
+        if (htmlTag.classList.contains("dark")) {
+          htmlTag.classList.remove("dark");
+          themeBtn.innerText = "☀️";
+        } else {
+          htmlTag.classList.add("dark");
+          themeBtn.innerText = "🌙";
+        }
+      });
+
+      dyslexicBtn.addEventListener("click", () => {
+        if (document.body.classList.contains("dyslexic-mode")) {
+          document.body.classList.remove("dyslexic-mode");
+          dyslexicBtn.innerText = "📖 OpenDyslexic: Off";
+        } else {
+          document.body.classList.add("dyslexic-mode");
+          dyslexicBtn.innerText = "📖 OpenDyslexic: On";
+        }
+      });
+
+      copyMDBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(editor.value);
+          const originalText = copyMDBtn.innerText;
+          copyMDBtn.innerText = "Copied!";
+          setTimeout(() => (copyMDBtn.innerText = originalText), 2000);
+        } catch (err) {
+          alert("Gagal menyalin teks");
+        }
+      });
+
+      copyHTMLBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(preview.innerHTML);
+          const originalText = copyHTMLBtn.innerText;
+          copyHTMLBtn.innerText = "Copied!";
+          setTimeout(() => (copyHTMLBtn.innerText = originalText), 2000);
+        } catch (err) {
+          alert("Gagal menyalin HTML");
+        }
+      });
+
+      downloadMDBtn.addEventListener("click", () => {
+        const blob = new Blob([editor.value], {
+          type: "text/markdown;charset=utf-8;",
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const firstLine = editor.value.trim().split("\n")[0];
+        const fileName = firstLine.startsWith("#")
+          ? firstLine
+              .replace(/^#+\s*/, "")
+              .trim()
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, "-")
+          : "document";
+        link.href = url;
+        link.download = `${fileName || "document"}.md`;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      });
+
+      renderMarkdown();
+
+      const zoomInBtn = document.getElementById("zoom-in-btn");
+      const zoomOutBtn = document.getElementById("zoom-out-btn");
+
+      let currentZoom = 100; // Persentase awal skala font
+
+      function applyZoom() {
+        // Mengatur ukuran font dasar pada editor dan preview container
+        editor.style.fontSize = `${0.875 * (currentZoom / 100)}rem`; // Base text-sm (0.875rem)
+        preview.style.fontSize = `${1 * (currentZoom / 100)}rem`; // Base prose text (1rem)
+      }
+
+      zoomInBtn.addEventListener("click", () => {
+        if (currentZoom < 200) {
+          // Batas maksimal zoom 200%
+          currentZoom += 10;
+          applyZoom();
+        }
+      });
+
+      zoomOutBtn.addEventListener("click", () => {
+        if (currentZoom > 70) {
+          // Batas minimal zoom 70%
+          currentZoom -= 10;
+          applyZoom();
+        }
+      });
+    </script>
+  </body>
+</html>
