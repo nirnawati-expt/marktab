@@ -4,6 +4,12 @@ An ultra-lightweight, 100% client-side Markdown editor and viewer. Built with pl
 
 ✒️ Try [MarkTab](https://nirnawati-expt.github.io/marktab/) Live. Free, lightweight, and secure markdown editor right in your browser.
 
+| Light Mode | Dark Mode |
+| :---: | :---: |
+| <img src="attachment/light_mode.png" width="100%" alt="MarkTab Light Mode"> | <img src="attachment/dark_mode.png" width="100%" alt="MarkTab Dark Mode"> |
+
+*Tip: You can easily toggle between these themes using the ☀️/🌙 button in the navigation bar.*
+
 ## Why This Exists
 
 Most Markdown editors mean installing a heavy desktop app, fiddling with IDE extensions, or paying for a subscription. For people who live in the browser anyway, launching another resource hog just to take notes is wasteful, it clutters the desktop, drains battery, and adds friction.
@@ -39,13 +45,7 @@ Most Markdown editors mean installing a heavy desktop app, fiddling with IDE ext
 ### Run Locally (Offline)
 
 1. Clone or download the repo
-2. Double-click `index.html`
-
-### Host Free on GitHub Pages
-
-1. Push to a public GitHub repo (name the entry file `index.html`)
-2. Go to repo **Settings** > **Pages**
-3. Set the build source to `main` (or `master`) and save
+2. Open the `index.html` in your browser
 
 ## License
 
