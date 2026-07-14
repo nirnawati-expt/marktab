@@ -154,6 +154,9 @@ dyslexicBtn.addEventListener("click", () => {
     dyslexicBtn.classList.remove("bg-orange-600");
     dyslexicBtn.classList.remove("hover:bg-orange-700");
 
+    previewContainer.classList.remove("p-10");
+    previewContainer.classList.add("p-6");
+
     editor.classList.add("dyslexic-mode");
   } else {
     document.body.classList.add("dyslexic-mode");
@@ -163,6 +166,9 @@ dyslexicBtn.addEventListener("click", () => {
     dyslexicBtn.classList.remove("bg-orange-800");
     dyslexicBtn.classList.remove("hover:bg-orange-900");
     editor.classList.remove("dyslexic-mode");
+
+    previewContainer.classList.add("p-10");
+    previewContainer.classList.remove("p-6");
   }
 });
 
