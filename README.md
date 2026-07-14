@@ -59,13 +59,6 @@ Blazing-fast rendering powered by `marked.js` with smart input debouncing.
 
 <img src="attachment/light_mode.png" width="100%" alt="real time rendering">
     
-## Getting Started
-
-### Run Locally (Offline)
-
-1. Clone or download the repo
-2. Open the `index.html` in your browser
-
 ## License
 
 - Software Code: Licensed under the [MIT](/LICENSE) License.
