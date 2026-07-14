@@ -1,0 +1,29 @@
+@import url("typography.css");
+@import url("variable.css");
+
+#preview {
+  content-visibility: auto;
+  contain-intrinsic-size: 100px 500px;
+}
+
+.preview-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.375rem;
+  background-color: #f3f4f6;
+}
+
+html.dark .preview-content img {
+  background-color: #1f2937;
+}
+
+.preview-content img:not([width]):not([height]) {
+  aspect-ratio: 16 / 9;
+  object-fit: cover; /* Memastikan placeholder rapi */
+}
+
+.preview-content img:complete {
+  aspect-ratio: auto;
+  object-fit: contain;
+}
