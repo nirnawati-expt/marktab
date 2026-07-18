@@ -42,8 +42,8 @@ Most Markdown editors mean installing a heavy desktop app, fiddling with IDE ext
 
 ## Performance Highlights
 
-### Near-Perfect Performance
-Achieves a **98% Lighthouse score**, fully optimized for accessibility and best practices despite using external utility frameworks.
+### Blazing fast Performance
+Achieves a **100% Lighthouse performance score**, fully optimized for accessibility and best practices despite using external utility frameworks.
 
 <img src="attachment/lighthouse.png" width="100%" alt="lighthouse navigation test report">
 

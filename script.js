@@ -12,6 +12,7 @@ const dyslexicBtn = document.getElementById("dyslexic-btn");
 const copyMDBtn = document.getElementById("copy-md-btn");
 const copyHTMLBtn = document.getElementById("copy-html-btn");
 const downloadMDBtn = document.getElementById("download-md-btn");
+const downloadHTMLBtn = document.getElementById("download-html-btn");
 const htmlTag = document.documentElement;
 let isSourceScroll = false;
 
@@ -183,6 +184,18 @@ copyMDBtn.addEventListener("click", async () => {
   }
 });
 
+// LOGIKA PENENTUAN NAMA FILE (DIPAKAI BERSAMA)
+function getFileName() {
+  const firstLine = editor.value.trim().split("\n")[0];
+  return firstLine.startsWith("#")
+    ? firstLine
+        .replace(/^#+\s*/, "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "-")
+    : "document";
+}
+
 copyHTMLBtn.addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(preview.innerHTML);
@@ -201,15 +214,56 @@ downloadMDBtn.addEventListener("click", () => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   const firstLine = editor.value.trim().split("\n")[0];
-  const fileName = firstLine.startsWith("#")
-    ? firstLine
-        .replace(/^#+\s*/, "")
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "-")
-    : "document";
+  const fileName = getFileName();
   link.href = url;
   link.download = `${fileName || "document"}.md`;
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+});
+
+downloadHTMLBtn.addEventListener("click", () => {
+  const currentTheme = htmlTag.className; // Mengambil 'light' atau 'dark' dari aplikasi saat ini
+  const isDyslexic = document.body.classList.contains("dyslexic-mode")
+    ? "dyslexic-mode"
+    : "";
+  const currentFontSize = preview.style.fontSize || "1rem";
+
+  // Menyusun file HTML mandiri lengkap dengan style pembungkus agar tampilan sama persis
+  const fullHtmlContent = `<!doctype html>
+<html lang="en" class="${currentTheme}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${getFileName() || "Exported Document"}</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>tailwind.config = { darkMode: 'class' };</script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+      .preview-content { font-family: ui-sans-serif, system-ui, sans-serif; }
+      .dyslexic-mode .preview-content, .dyslexic-mode .preview-content * {
+        font-family: "OpenDyslexic", sans-serif !important;
+      }
+      body { padding: 2rem; max-width: 64rem; margin: 0 auto; }
+    </style>
+  </head>
+  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 ${isDyslexic}">
+    <div class="preview-content prose prose-slate dark:prose-invert max-w-none" style="font-size: ${currentFontSize}">
+      ${preview.innerHTML}
+    </div>
+  </body>
+</html>`;
+
+  const blob = new Blob([fullHtmlContent], {
+    type: "text/html;charset=utf-8;",
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const fileName = getFileName();
+  link.href = url;
+  link.download = `${fileName || "document"}.html`;
   link.style.display = "none";
   document.body.appendChild(link);
   link.click();
