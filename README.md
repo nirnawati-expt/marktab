@@ -1,12 +1,12 @@
-# MarkTab
+# live.md
 
 An ultra-lightweight, 100% client-side Markdown editor and viewer. Built with plain HTML, Tailwind CSS, and pure JavaScript. No bundlers, frameworks, or npm. It's designed to be free, privacy-focused, and easy on low-spec laptops.
 
-✒️ Try [MarkTab](https://nirnawati-expt.github.io/marktab/) Live. Free, lightweight, and secure markdown editor right in your browser.
+✒️ Try [live.md](https://nirnawati-expt.github.io/live.md/) Live. Free, lightweight, and secure markdown editor right in your browser.
 
 | Light Mode | Dark Mode |
 | :---: | :---: |
-| <img src="attachment/light_mode.png" width="100%" alt="MarkTab Light Mode"> | <img src="attachment/dark_mode.png" width="100%" alt="MarkTab Dark Mode"> |
+| <img src="attachment/light_mode.png" width="100%" alt="live.md Light Mode"> | <img src="attachment/dark_mode.png" width="100%" alt="live.md Dark Mode"> |
 
 *Tip: You can easily toggle between these themes using the ☀️/🌙 button in the navigation bar.*
 
@@ -14,7 +14,7 @@ An ultra-lightweight, 100% client-side Markdown editor and viewer. Built with pl
 
 Most Markdown editors mean installing a heavy desktop app, fiddling with IDE extensions, or paying for a subscription. For people who live in the browser anyway, launching another resource hog just to take notes is wasteful, it clutters the desktop, drains battery, and adds friction.
 
-**MarkTab** cuts through that. Keep it open in a browser tab instead. A new tab uses far fewer resources than an Electron app or IDE, and your workspace stays clean.
+**live.md** cuts through that. Keep it open in a browser tab instead. A new tab uses far fewer resources than an Electron app or IDE, and your workspace stays clean.
 
 ## Who It's For
 
